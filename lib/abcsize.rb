@@ -3,6 +3,7 @@
 require_relative 'abcsize/version'
 
 require 'rubocop'
+require 'rubocop-ast'
 
 module Abcsize
   class Error < StandardError; end
@@ -13,12 +14,9 @@ module Abcsize
       source = get_source_from_file(path)
       ruby_version = RuboCop::TargetRuby.supported_versions.last
 
-      node = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
+      nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
 
-      abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
-
-      puts  "ABC size: #{abc_size}, while: <= 17 satisfactory, 18..30 unsatisfactory, > 30 dangerous\n"\
-            "Assignments, branches (method calls), conditions: #{abc}"
+      nodes.each_node { |n| return_result(n) if n.is_a?(RuboCop::AST::DefNode) }
     end
 
     private
@@ -30,8 +28,21 @@ module Abcsize
 
       file
     rescue TypeError, Errno::ENOENT, Errno::EISDIR, Error => e
-      puts "#{e.message}\nPlease provide valid path to valid file."
+      puts  "#{e.message}\n"\
+            'Please provide valid path to valid file.'
       exit
+    end
+
+    def return_result(node)
+      abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
+
+      puts  "Method name: #{r(node.method_name)}\n"\
+            "ABC size: #{r(abc_size)}, while: <= 17 satisfactory, 18..30 unsatisfactory, > 30 dangerous\n"\
+            "Assignments, branches (method calls), conditions: #{r(abc)}\n\n"
+    end
+
+    def r(input)
+      Rainbow(input).yellow
     end
   end
 end
