@@ -50,7 +50,8 @@ module Abcsize
     end
 
     def color(input, satisfactory)
-      satisfactory ? Rainbow(input).yellow : Rainbow(input).red
+      color = satisfactory ? :yellow : :red
+      Rainbow(input).color(color)
     end
 
     def print_interpretation
