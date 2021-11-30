@@ -12,4 +12,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # disable `puts` when running rspec
+  config.before { allow($stdout).to receive(:puts) }
 end

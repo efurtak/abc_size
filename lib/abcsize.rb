@@ -10,43 +10,63 @@ module Abcsize
   class Error < StandardError; end
 
   # class responsible for returning ABC size from ABC size calculator
-  class Abc
+  class Calculator
+    attr_reader :results
+
     SATISFACTORY_ABC_SIZE = 17
 
-    def size(path)
-      source = get_source_from_file(path)
+    def initialize
+      @results = []
+    end
+
+    def call(source_code: nil, path: nil, discount: false)
+      source = source_code || source_code_from_file(path)
       ruby_version = RuboCop::TargetRuby.supported_versions.last
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
 
-      nodes.each_node { |n| return_result(n) if n.is_a?(RuboCop::AST::DefNode) }
+      nodes.each_node { |node| results << calculate_result(node, discount) if node.is_a?(RuboCop::AST::DefNode) }
+
+      print_results
 
       print_interpretation
+
+      # return results for testing purposes
+      results
     end
 
     private
 
-    def get_source_from_file(path)
-      content = File.open(path, 'r').read
-      raise Error, 'File is empty!' if content.empty?
+    def source_code_from_file(path)
+      data = File.open(path, 'r').read
+      raise Error, 'File is empty!' if data.empty?
 
-      content
+      data
     rescue TypeError, Errno::ENOENT, Errno::EISDIR, Error => e
       puts  "#{e.message}\n"\
             'Please provide valid path to valid file.'
       exit
     end
 
-    def return_result(node)
-      abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
+    def calculate_result(node, discount)
+      abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(
+        node,
+        discount_repeated_attributes: discount
+      )
 
-      satisfactory = abc_size <= SATISFACTORY_ABC_SIZE
+      [abc_size, abc, node.method_name]
+    end
 
-      puts "ABC size: #{color(format('%.2f', abc_size), satisfactory)}, "\
-           "ABC: #{color(abc, satisfactory)} "\
-           "for method: #{color(node.method_name, satisfactory)}"
+    def print_results
+      results.each do |result|
+        abc_size, abc, method_name = result
 
-      [abc_size, abc]
+        satisfactory = abc_size <= SATISFACTORY_ABC_SIZE
+
+        puts "ABC size: #{color(format('%.2f', abc_size), satisfactory)}, "\
+             "ABC: #{color(abc, satisfactory)} "\
+             "for method: #{color(method_name, satisfactory)}"
+      end
     end
 
     def color(input, satisfactory)
