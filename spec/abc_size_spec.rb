@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Abcsize do
+RSpec.describe AbcSize do
   it 'has a version number' do
-    expect(Abcsize::VERSION).not_to be nil
+    expect(AbcSize::VERSION).not_to be nil
   end
 end

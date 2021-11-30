@@ -3,8 +3,8 @@
 
 $LOAD_PATH.unshift("#{__dir__}/../lib")
 
-require 'abcsize'
+require 'abc_size'
 
 path, discount = ARGV
 
-Abcsize::Calculator.new.call(path: path, discount: !discount.nil?)
+AbcSize::Calculator.new.call(path: path, discount: !discount.nil?)

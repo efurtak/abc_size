@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength, RSpec/ContextWording, RSpec/NestedGroups
-RSpec.describe Abcsize::Calculator do
+RSpec.describe AbcSize::Calculator do
   describe '#call' do
     subject { described_class.new.call(source_code: source, discount: discount)[0][1] }
 

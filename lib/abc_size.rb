@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'abcsize/version'
+require_relative 'abc_size/version'
 
 require 'rubocop'
 require 'rubocop-ast'
 require 'rainbow'
 
-module Abcsize
+module AbcSize
   class Error < StandardError; end
 
   # class responsible for returning ABC size from ABC size calculator
