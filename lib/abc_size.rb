@@ -11,9 +11,9 @@ module AbcSize
 
   # class responsible for returning ABC size from ABC size calculator
   class Calculator
-    attr_reader :results
-
     SATISFACTORY_ABC_SIZE = 17
+
+    attr_reader :results
 
     def initialize
       @results = []
