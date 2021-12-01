@@ -3,9 +3,14 @@
 # rubocop:disable Metrics/BlockLength, RSpec/ContextWording, RSpec/NestedGroups
 RSpec.describe AbcSize::Calculator do
   describe '#call' do
-    subject { described_class.new.call(source_code: source, discount: discount)[0][1] }
+    subject do
+      described_class.new.call(
+        source_code: source,
+        discount: discount_repeated_attributes
+      )[0][1]
+    end
 
-    let(:discount) { false }
+    let(:discount_repeated_attributes) { false }
 
     context 'multiple calls with return' do
       let(:source) { <<~RUBY }
@@ -322,7 +327,7 @@ RSpec.describe AbcSize::Calculator do
     end
 
     context 'when counting repeated calls' do
-      let(:discount) { false }
+      let(:discount_repeated_attributes) { false }
       let(:source) { <<~RUBY }
         def method_name(var)
           var.foo
@@ -336,7 +341,7 @@ RSpec.describe AbcSize::Calculator do
     end
 
     context 'when discounting repeated calls' do
-      let(:discount) { true }
+      let(:discount_repeated_attributes) { true }
 
       context 'when root receiver is a var' do
         let(:source) { <<~RUBY }
