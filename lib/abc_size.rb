@@ -43,8 +43,8 @@ module AbcSize
 
       data
     rescue TypeError, Errno::ENOENT, Errno::EISDIR, Error => e
-      puts  "#{e.message}\n"\
-            'Please provide valid path to valid file.'
+      puts "#{e.message}\n"\
+           'Please provide valid path to valid file.'
       exit
     end
 
@@ -75,9 +75,9 @@ module AbcSize
     end
 
     def print_interpretation
-      puts  "\n"\
-            "ABC size: <= 17 satisfactory, 18..30 unsatisfactory, > 30 dangerous\n"\
-            'ABC: <assignments, branches (method calls), conditions>'
+      puts "\n"\
+           "ABC size: <= 17 satisfactory, 18..30 unsatisfactory, > 30 dangerous\n"\
+           'ABC: <assignments, branches (method calls), conditions>'
     end
   end
 end
