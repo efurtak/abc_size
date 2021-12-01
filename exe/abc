@@ -6,6 +6,13 @@ $LOAD_PATH.unshift("#{__dir__}/../lib")
 require 'abc_size'
 
 path = ARGV[0]
-discount = ARGV[1] == '-d'
+discount = ['-d', '--discount'].include?(ARGV[1])
 
-AbcSize::Calculator.new.call(path: path, discount: discount)
+if path
+  AbcSize::Calculator.new.call(path: path, discount: discount)
+else
+  puts "Usage: bundle exec abc [file] [options]\n"\
+       "\n"\
+       "Options:\n"\
+       '    -d, --discount    Discount repeated attributes'
+end
