@@ -1,38 +1,35 @@
 # AbcSize
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/abc_size`. To experiment with that code, run `bin/console` for an interactive prompt.
+Calculate ABC size, divided into methods defined in a single file.
 
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
+## Installation with bundler
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'abc_size'
+gem 'abc_size', git: 'https://github.com/efurtak/abc_size'
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
+## Installation without bundler
 
-    $ gem install abc_size
+    $ gem install abc_size -s 'https://github.com/efurtak/abc_size'
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ abc [file] [options]
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+Options:
+    -d, --discount    Discount repeated attributes
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/efurtak/abc_size.
+Bug reports are welcome on GitHub at https://github.com/efurtak/abc_size.
 
 ## License
 

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ['Emil Furtak']
   spec.email = ['emil.furtak@gmail.com']
 
-  spec.summary = 'Calculate code ABC size'
-  spec.description = 'Calculate code ABC size, basing on RuboCop ABC size calculator'
+  spec.summary = 'Calculate ABC size.'
+  spec.description = 'Calculate ABC size, divided into methods defined in a single file.'
   spec.homepage = 'https://github.com/efurtak/abc_size'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.6.0'
