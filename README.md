@@ -1,4 +1,4 @@
-# AbcSize
+# abc_size
 
 Calculate ABC size, divided into methods defined in a single file.
 
@@ -12,15 +12,21 @@ gem 'abc_size', git: 'https://github.com/efurtak/abc_size'
 
 And then execute:
 
-    $ bundle install
+```sh
+bundle install
+```
 
 ## Installation without bundler
 
-    $ gem install abc_size -s 'https://github.com/efurtak/abc_size'
+```sh
+gem install abc_size -s 'https://github.com/efurtak/abc_size'
+```
 
 ## Usage
 
-    $ abc [file] [options]
+```sh
+abc [file] [options]
+```
 
 ```
 Options:
