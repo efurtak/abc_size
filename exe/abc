@@ -11,7 +11,7 @@ discount = ['-d', '--discount'].include?(ARGV[1])
 if path
   AbcSize::Calculator.new.call(path: path, discount: discount)
 else
-  puts "Usage: bundle exec abc [file] [options]\n"\
+  puts "Usage: abc [file] [options]\n"\
        "\n"\
        "Options:\n"\
        '    -d, --discount    Discount repeated attributes'
