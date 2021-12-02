@@ -1,0 +1,6 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  NewCops: enable
+
+Lint/EmptyFile:
+  Enabled: false
