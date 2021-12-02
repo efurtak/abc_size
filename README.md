@@ -18,8 +18,28 @@ bundle install
 
 ## Installation without bundler
 
+If it works:
+
 ```sh
 gem install abc_size -s 'https://github.com/efurtak/abc_size'
+```
+
+Otherwise:
+
+```sh
+git clone https://github.com/efurtak/abc_size
+```
+
+```sh
+cd abc_size
+```
+
+```sh
+gem build abc_size.gemspec
+```
+
+```sh
+gem install abc_size-*.gem
 ```
 
 ## Usage
