@@ -2,9 +2,9 @@
 
 require_relative 'abc_size/version'
 
+require 'rainbow'
 require 'rubocop'
 require 'rubocop-ast'
-require 'rainbow'
 
 module AbcSize
   class Error < StandardError; end
