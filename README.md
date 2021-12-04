@@ -2,7 +2,7 @@
 
 Calculate ABC size, divided into methods defined in a single file.
 
-## Installation with Bundler - as a part of an application
+## Installation with Bundler
 
 Add this line to your application's Gemfile:
 
@@ -16,7 +16,7 @@ And then execute:
 bundle install
 ```
 
-## Installation without Bundler - as a local gem
+## Installation with RubyGems
 
 From RubyGems
 
