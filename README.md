@@ -2,21 +2,7 @@
 
 Calculate ABC size, divided into methods defined in a single file.
 
-## Installation with Bundler
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'abc_size'
-```
-
-And then execute:
-
-```sh
-bundle install
-```
-
-## Installation with RubyGems
+## Installation
 
 From RubyGems
 
