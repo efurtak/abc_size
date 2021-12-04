@@ -35,9 +35,9 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
-  spec.add_dependency 'rainbow'
-  spec.add_dependency 'rubocop'
-  spec.add_dependency 'rubocop-ast'
+  spec.add_dependency 'rainbow', '>= 3.0.0'
+  spec.add_dependency 'rubocop', '>= 1.23.0'
+  spec.add_dependency 'rubocop-ast', '>= 1.14.0'
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
