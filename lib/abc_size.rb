@@ -21,7 +21,7 @@ module AbcSize
 
     def call(source_code: nil, path: nil, discount: false)
       source = source_code || source_code_from_file(path)
-      ruby_version = RuboCop::TargetRuby.supported_versions.last
+      ruby_version = RuboCop::TargetRuby.supported_versions.first
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
 
