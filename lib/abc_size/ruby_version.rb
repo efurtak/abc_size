@@ -10,35 +10,49 @@ module AbcSize
 
     RUBY_VERSION_FILENAME = '.ruby-version'
 
-    def self.info(path)
-      relative_path_given = !path.start_with?('/')
+    attr_reader :path
 
-      if relative_path_given
-        begin
-          data = File.read(RUBY_VERSION_FILENAME, mode: 'r')
-          raise EmptyFileError if data.empty?
-
-          match_data = data.match(/\A\d+\.\d+/)
-          raise UnknownFormatError if match_data.nil?
-
-          file_version = match_data[0].to_f
-
-          detected_version = SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
-        rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
-          error_message = assign_error_message(e)
-        end
-      end
-
-      {
-        supported: SUPPORTED_VERSIONS,
-        default: DEFAULT_VERSION,
-        detected: detected_version,
-        relative_path_given: relative_path_given,
-        error_message: error_message
-      }
+    def initialize(path)
+      @path = path
     end
 
-    def self.assign_error_message(error)
+    def info
+      begin
+        data = return_data
+
+        match_data = return_match_data(data)
+
+        file_version = match_data[0].to_f
+
+        detected_version = relative_path_given? && SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
+      rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
+        error_message = assign_error_message(e)
+      end
+
+      return_info_hash(SUPPORTED_VERSIONS, DEFAULT_VERSION, detected_version, relative_path_given?, error_message)
+    end
+
+    private
+
+    def relative_path_given?
+      !path.start_with?('/')
+    end
+
+    def return_data
+      data = File.read(RUBY_VERSION_FILENAME, mode: 'r')
+      raise EmptyFileError if data.empty?
+
+      data
+    end
+
+    def return_match_data(data)
+      match_data = data.match(/\A\d+\.\d+/)
+      raise UnknownFormatError if match_data.nil?
+
+      match_data
+    end
+
+    def assign_error_message(error)
       case error
       when Errno::ENOENT
         'Not detected .ruby-version file!'
@@ -47,6 +61,16 @@ module AbcSize
       when UnknownFormatError
         'Detected .ruby-version file, but file contain unknown format!'
       end
+    end
+
+    def return_info_hash(supported_versions, default_version, detected_version, relative_path_given, error_message)
+      {
+        supported: supported_versions,
+        default: default_version,
+        detected: detected_version,
+        relative_path_given: relative_path_given,
+        error_message: error_message
+      }
     end
   end
 end
