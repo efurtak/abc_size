@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'abc_size/errors'
-require_relative 'abc_size/ruby_version'
-require_relative 'abc_size/version'
-
 require 'rainbow'
 require 'rubocop'
 require 'rubocop-ast'
+
+require_relative 'abc_size/errors'
+require_relative 'abc_size/ruby_version'
+require_relative 'abc_size/version'
 
 module AbcSize
   # returning ABC size from ABC size calculator
