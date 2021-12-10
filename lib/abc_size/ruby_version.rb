@@ -17,16 +17,18 @@ module AbcSize
     end
 
     def info
-      begin
-        data = return_data
+      if relative_path_given?
+        begin
+          data = return_data
 
-        match_data = return_match_data(data)
+          match_data = return_match_data(data)
 
-        file_version = match_data[0].to_f
+          file_version = match_data[0].to_f
 
-        detected_version = relative_path_given? && SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
-      rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
-        error_message = assign_error_message(e)
+          detected_version = return_detected_version(file_version)
+        rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
+          error_message = assign_error_message(e)
+        end
       end
 
       return_info_hash(SUPPORTED_VERSIONS, DEFAULT_VERSION, detected_version, relative_path_given?, error_message)
@@ -50,6 +52,10 @@ module AbcSize
       raise UnknownFormatError if match_data.nil?
 
       match_data
+    end
+
+    def return_detected_version(file_version)
+      SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
     end
 
     def assign_error_message(error)
