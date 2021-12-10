@@ -14,16 +14,18 @@ module AbcSize
     SATISFACTORY_ABC_SIZE = 17
 
     attr_reader :results
+    attr_accessor :ruby_version
 
     def initialize
       @results = []
+      @ruby_version = nil
     end
 
     def call(source_code: nil, path: nil, discount: false)
       source = source_code || source_code_from_file(path)
 
       ruby_info = RubyVersion.new(path).info
-      ruby_version = ruby_info[:detected] || ruby_info[:default]
+      @ruby_version = ruby_info[:detected] || ruby_info[:default]
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
       nodes.each_node { |node| results << calculate_result(node, discount) if node.is_a?(RuboCop::AST::DefNode) }
@@ -77,7 +79,7 @@ module AbcSize
       return unless ruby_info[:relative_path_given] && ruby_info[:error_message]
 
       puts "Relative path given. #{color(ruby_info[:error_message], false)}\n"\
-           "Used parser version: #{color(ruby_info[:default], true)}. "\
+           "Used parser version: #{color(ruby_version, true)}. "\
            "Supported versions: #{ruby_info[:supported]}\n"\
            "\n"
     end
@@ -86,7 +88,7 @@ module AbcSize
       return unless ruby_info[:relative_path_given] && ruby_info[:error_message].nil?
 
       puts "Relative path given. #{color('Detection enabled.', true)}\n"\
-           "Used parser version: #{color(ruby_info[:detected], true)}. "\
+           "Used parser version: #{color(ruby_version, true)}. "\
            "Supported versions: #{ruby_info[:supported]}\n"\
            "\n"
     end
@@ -95,7 +97,7 @@ module AbcSize
       return if ruby_info[:relative_path_given]
 
       puts "Absolute path given. #{color('Detection disabled!', false)}\n"\
-           "Used parser version: #{color(ruby_info[:default], true)}. "\
+           "Used parser version: #{color(ruby_version, true)}. "\
            "Supported versions: #{ruby_info[:supported]}\n"\
            "\n"
     end
