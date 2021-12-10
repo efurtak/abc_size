@@ -39,7 +39,7 @@ module AbcSize
     private
 
     def source_code_from_file(path)
-      data = File.open(path, 'r').read
+      data = File.read(path)
       raise Error, 'File is empty!' if data.empty?
 
       data
