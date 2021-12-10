@@ -19,13 +19,9 @@ module AbcSize
     def info
       if relative_path_given?
         begin
-          data = return_data
+          file_version = return_file_version
 
-          match_data = return_match_data(data)
-
-          file_version = match_data[0].to_f
-
-          detected_version = return_detected_version(file_version)
+          detected_version = SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
         rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
           error_message = assign_error_message(e)
         end
@@ -40,8 +36,16 @@ module AbcSize
       !path.start_with?('/')
     end
 
+    def return_file_version
+      data = return_data
+
+      match_data = return_match_data(data)
+
+      match_data[0].to_f
+    end
+
     def return_data
-      data = File.read(RUBY_VERSION_FILENAME, mode: 'r')
+      data = File.read(RUBY_VERSION_FILENAME)
       raise EmptyFileError if data.empty?
 
       data
@@ -52,10 +56,6 @@ module AbcSize
       raise UnknownFormatError if match_data.nil?
 
       match_data
-    end
-
-    def return_detected_version(file_version)
-      SUPPORTED_VERSIONS.include?(file_version) ? file_version : nil
     end
 
     def assign_error_message(error)
