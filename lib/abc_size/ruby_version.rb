@@ -33,7 +33,7 @@ module AbcSize
     private
 
     def relative_path_given?
-      !path.start_with?('/')
+      !path.start_with?('/') if path
     end
 
     def return_file_version
