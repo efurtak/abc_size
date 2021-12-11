@@ -18,13 +18,13 @@ module AbcSize
 
     def initialize
       @results = []
-      @ruby_version = nil
     end
 
     def call(source_code: nil, path: nil, discount: false)
       source = source_code || source_code_from_file(path)
 
-      ruby_info = RubyVersion.new(path).info
+      ruby_info = RubyVersion.new(nil).info if source_code # TODO: improve this
+      ruby_info = RubyVersion.new(path).info if path
       @ruby_version = ruby_info[:detected] || ruby_info[:default]
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
@@ -51,7 +51,9 @@ module AbcSize
 
     def calculate_result(node, discount)
       abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(
-        node.body,
+        # TODO: node vs. node.body
+        node,
+        # node.body,
         discount_repeated_attributes: discount
       )
 
