@@ -51,9 +51,7 @@ module AbcSize
 
     def calculate_result(node, discount)
       abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(
-        # TODO: node vs. node.body
         node,
-        # node.body,
         discount_repeated_attributes: discount
       )
 
