@@ -5,8 +5,8 @@ require 'rubocop'
 require 'rubocop-ast'
 
 require_relative 'abc_size/errors'
-require_relative 'abc_size/ruby_version'
 require_relative 'abc_size/version'
+require_relative 'abc_size/version_detector'
 
 module AbcSize
   # returning ABC size from ABC size calculator
@@ -23,14 +23,14 @@ module AbcSize
     def call(source_code: nil, path: nil, discount: false)
       source = source_code || source_code_from_file(path)
 
-      ruby_info = RubyVersion.new(nil).info if source_code # TODO: improve this
-      ruby_info = RubyVersion.new(path).info if path
-      @ruby_version = ruby_info[:detected] || ruby_info[:default]
+      version_info = VersionDetector.new(nil).call if source_code # TODO: improve this
+      version_info = VersionDetector.new(path).call if path
+      @ruby_version = version_info[:detected] || version_info[:default]
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
       nodes.each_node { |node| results << calculate_result(node, discount) if node.is_a?(RuboCop::AST::DefNode) }
 
-      print_everything(ruby_info)
+      print_everything(version_info)
 
       # return results for testing purposes
       results
@@ -63,42 +63,42 @@ module AbcSize
       Rainbow(input).color(color)
     end
 
-    def print_everything(ruby_info)
-      print_ruby_info(ruby_info)
+    def print_everything(version_info)
+      print_ruby_info(version_info)
       print_results
       print_interpretation
     end
 
-    def print_ruby_info(ruby_info)
-      notice_for_relative_path_with_error(ruby_info)
-      notice_for_relative_path_without_error(ruby_info)
-      notice_for_absolute_path(ruby_info)
+    def print_ruby_info(version_info)
+      notice_for_relative_path_with_error(version_info)
+      notice_for_relative_path_without_error(version_info)
+      notice_for_absolute_path(version_info)
     end
 
-    def notice_for_relative_path_with_error(ruby_info)
-      return unless ruby_info[:relative_path_given] && ruby_info[:error_message]
+    def notice_for_relative_path_with_error(version_info)
+      return unless version_info[:relative_path_given] && version_info[:error_message]
 
-      puts "Relative path given. #{color(ruby_info[:error_message], false)}\n"\
+      puts "Relative path given. #{color(version_info[:error_message], false)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
-           "Supported versions: #{ruby_info[:supported]}\n"\
+           "Supported versions: #{version_info[:supported]}\n"\
            "\n"
     end
 
-    def notice_for_relative_path_without_error(ruby_info)
-      return unless ruby_info[:relative_path_given] && ruby_info[:error_message].nil?
+    def notice_for_relative_path_without_error(version_info)
+      return unless version_info[:relative_path_given] && version_info[:error_message].nil?
 
       puts "Relative path given. #{color('Detection enabled.', true)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
-           "Supported versions: #{ruby_info[:supported]}\n"\
+           "Supported versions: #{version_info[:supported]}\n"\
            "\n"
     end
 
-    def notice_for_absolute_path(ruby_info)
-      return if ruby_info[:relative_path_given]
+    def notice_for_absolute_path(version_info)
+      return if version_info[:relative_path_given]
 
       puts "Absolute path given. #{color('Detection disabled!', false)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
-           "Supported versions: #{ruby_info[:supported]}\n"\
+           "Supported versions: #{version_info[:supported]}\n"\
            "\n"
     end
 

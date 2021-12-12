@@ -3,8 +3,8 @@
 require 'rubocop'
 
 module AbcSize
-  # Ruby version detection
-  class RubyVersion
+  # version detector
+  class VersionDetector
     SUPPORTED_VERSIONS = RuboCop::TargetRuby.supported_versions.freeze
     DEFAULT_VERSION = SUPPORTED_VERSIONS.first.freeze
 
@@ -16,7 +16,7 @@ module AbcSize
       @path = path
     end
 
-    def info
+    def call
       if relative_path_given?
         begin
           file_version = return_file_version
@@ -27,7 +27,7 @@ module AbcSize
         end
       end
 
-      return_info_hash(SUPPORTED_VERSIONS, DEFAULT_VERSION, detected_version, relative_path_given?, error_message)
+      version_info(SUPPORTED_VERSIONS, DEFAULT_VERSION, detected_version, relative_path_given?, error_message)
     end
 
     private
@@ -69,7 +69,7 @@ module AbcSize
       end
     end
 
-    def return_info_hash(supported_versions, default_version, detected_version, relative_path_given, error_message)
+    def version_info(supported_versions, default_version, detected_version, relative_path_given, error_message)
       {
         supported: supported_versions,
         default: default_version,
