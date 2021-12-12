@@ -85,7 +85,7 @@ module AbcSize
     def notice_for_relative_path_with_error(version_info, ruby_version)
       return unless version_info[:other][:relative_path_given] && version_info[:other][:error_message]
 
-      puts "Relative path given. #{color(version_info[:error_message], false)}\n"\
+      puts "Relative path given. #{color(version_info[:other][:error_message], false)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
            "Supported versions: #{version_info[:supported]}\n"\
            "\n"
