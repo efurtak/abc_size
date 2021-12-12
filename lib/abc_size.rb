@@ -13,24 +13,26 @@ module AbcSize
   class Calculator
     SATISFACTORY_ABC_SIZE = 17
 
-    attr_reader :results
-    attr_accessor :ruby_version
+    attr_reader :source_code, :path, :discount, :results
 
-    def initialize
+    def initialize(source_code: nil, path: nil, discount: false)
+      @source_code = source_code
+      @path = path
+      @discount = discount
+
       @results = []
     end
 
-    def call(source_code: nil, path: nil, discount: false)
-      source = source_code || source_code_from_file(path)
+    def call
+      source = source_code || source_code_from_file
 
-      version_info = VersionDetector.new(nil).call if source_code # TODO: improve this
-      version_info = VersionDetector.new(path).call if path
-      @ruby_version = version_info[:detected] || version_info[:default]
+      version_info = return_version_info
+      ruby_version = version_info[:detected] || version_info[:default]
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
       nodes.each_node { |node| results << calculate_result(node, discount) if node.is_a?(RuboCop::AST::DefNode) }
 
-      print_everything(version_info)
+      print_everything(version_info, ruby_version)
 
       # return results for testing purposes
       results
@@ -38,7 +40,7 @@ module AbcSize
 
     private
 
-    def source_code_from_file(path)
+    def source_code_from_file
       data = File.read(path)
       raise Error, 'File is empty!' if data.empty?
 
@@ -47,6 +49,11 @@ module AbcSize
       puts "#{e.message}\n"\
            'Please provide valid path to valid file.'
       exit
+    end
+
+    def return_version_info
+      path_or_nil = path || nil
+      VersionDetector.new(path_or_nil).call
     end
 
     def calculate_result(node, discount)
@@ -63,19 +70,19 @@ module AbcSize
       Rainbow(input).color(color)
     end
 
-    def print_everything(version_info)
-      print_ruby_info(version_info)
+    def print_everything(version_info, ruby_version)
+      print_version(version_info, ruby_version)
       print_results
       print_interpretation
     end
 
-    def print_ruby_info(version_info)
-      notice_for_relative_path_with_error(version_info)
-      notice_for_relative_path_without_error(version_info)
-      notice_for_absolute_path(version_info)
+    def print_version(version_info, ruby_version)
+      notice_for_relative_path_with_error(version_info, ruby_version)
+      notice_for_relative_path_without_error(version_info, ruby_version)
+      notice_for_absolute_path(version_info, ruby_version)
     end
 
-    def notice_for_relative_path_with_error(version_info)
+    def notice_for_relative_path_with_error(version_info, ruby_version)
       return unless version_info[:relative_path_given] && version_info[:error_message]
 
       puts "Relative path given. #{color(version_info[:error_message], false)}\n"\
@@ -84,7 +91,7 @@ module AbcSize
            "\n"
     end
 
-    def notice_for_relative_path_without_error(version_info)
+    def notice_for_relative_path_without_error(version_info, ruby_version)
       return unless version_info[:relative_path_given] && version_info[:error_message].nil?
 
       puts "Relative path given. #{color('Detection enabled.', true)}\n"\
@@ -93,7 +100,7 @@ module AbcSize
            "\n"
     end
 
-    def notice_for_absolute_path(version_info)
+    def notice_for_absolute_path(version_info, ruby_version)
       return if version_info[:relative_path_given]
 
       puts "Absolute path given. #{color('Detection disabled!', false)}\n"\
