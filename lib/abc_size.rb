@@ -83,7 +83,7 @@ module AbcSize
     end
 
     def notice_for_relative_path_with_error(version_info, ruby_version)
-      return unless version_info[:relative_path_given] && version_info[:error_message]
+      return unless version_info[:other][:relative_path_given] && version_info[:other][:error_message]
 
       puts "Relative path given. #{color(version_info[:error_message], false)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
@@ -92,7 +92,7 @@ module AbcSize
     end
 
     def notice_for_relative_path_without_error(version_info, ruby_version)
-      return unless version_info[:relative_path_given] && version_info[:error_message].nil?
+      return unless version_info[:other][:relative_path_given] && version_info[:other][:error_message].nil?
 
       puts "Relative path given. #{color('Detection enabled.', true)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\
@@ -101,7 +101,7 @@ module AbcSize
     end
 
     def notice_for_absolute_path(version_info, ruby_version)
-      return if version_info[:relative_path_given]
+      return if version_info[:other][:relative_path_given]
 
       puts "Absolute path given. #{color('Detection disabled!', false)}\n"\
            "Used parser version: #{color(ruby_version, true)}. "\

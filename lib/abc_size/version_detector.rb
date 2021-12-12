@@ -74,8 +74,10 @@ module AbcSize
         supported: supported_versions,
         default: default_version,
         detected: detected_version,
-        relative_path_given: relative_path_given,
-        error_message: error_message
+        other: {
+          relative_path_given: relative_path_given,
+          error_message: error_message
+        }
       }
     end
   end
