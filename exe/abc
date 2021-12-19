@@ -1,18 +1,19 @@
 #!/usr/bin/env ruby
+
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift("#{__dir__}/../lib")
 
 require 'abc_size'
 
-path = ARGV[0]
-discount = ['-d', '--discount'].include?(ARGV[1])
+path, *parameters = ARGV
 
 if path
-  AbcSize::Calculator.new(path: path, discount: discount).call
+  AbcSize::Calculator.new(path: path, parameters: parameters).call
 else
   puts "Usage: abc [file] [options]\n"\
        "\n"\
        "Options:\n"\
-       '    -d, --discount    Discount repeated attributes'
+       "    -d, --discount    Discount repeated attributes\n"\
+       '    -r, --ruby        Ruby version'
 end
