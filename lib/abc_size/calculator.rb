@@ -54,7 +54,7 @@ module AbcSize
       ruby_version
     rescue Error => e
       puts "#{e.message}\n"\
-           'If absolute path given, please provide Ruby version with `-r` or `--ruby` option.'
+           'Please provide Ruby version with `-r` or `--ruby` option, especially if absolute path given.'
       exit
     end
 

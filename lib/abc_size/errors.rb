@@ -6,4 +6,6 @@ module AbcSize
   class EmptyFileError < Error; end
 
   class UnknownFormatError < Error; end
+
+  class UnsupportedVersionError < Error; end
 end

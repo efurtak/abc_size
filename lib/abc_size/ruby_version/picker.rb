@@ -23,10 +23,10 @@ module AbcSize
         parameters_version = parameters[value_index].to_f
 
         picked_version = return_if_supported_version(parameters_version)
-        raise Error, 'Unsupported Ruby version given.' if picked_version.nil?
+        raise UnsupportedVersionError, 'Unsupported Ruby version given.' if picked_version.nil?
 
         picked_version
-      rescue Error => e
+      rescue UnsupportedVersionError => e
         puts "#{e.message}\n"\
              "Supported versions: #{RubyVersion::SUPPORTED_VERSIONS}"
         exit
