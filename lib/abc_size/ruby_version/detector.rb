@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'common'
-
 module AbcSize
   module RubyVersion
     # Ruby version detector
