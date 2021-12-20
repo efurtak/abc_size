@@ -19,14 +19,9 @@ module AbcSize
 
         file_version = return_file_version
 
-        detected_version = return_if_supported_version(file_version)
-        raise UnsupportedVersionError, 'Unsupported Ruby version given.' if detected_version.nil?
-
-        detected_version
+        return_supported_version_if_version_supported(file_version)
       rescue Errno::ENOENT, EmptyFileError, UnknownFormatError => e
         rescue_detection_error(e)
-      rescue UnsupportedVersionError => e
-        rescue_unsupported_version_error(e)
       end
 
       private
@@ -66,12 +61,6 @@ module AbcSize
         when UnknownFormatError
           puts 'Detected `.ruby-version` file, but file contain unknown format!'
         end
-        exit
-      end
-
-      def rescue_unsupported_version_error(error)
-        puts "#{error.message}\n"\
-             "Supported versions: #{RubyVersion::SUPPORTED_VERSIONS}"
         exit
       end
     end

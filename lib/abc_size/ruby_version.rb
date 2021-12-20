@@ -6,8 +6,15 @@ module AbcSize
 
     # common methods
     module Common
-      def return_if_supported_version(version)
-        RubyVersion::SUPPORTED_VERSIONS.include?(version) ? version : nil
+      def return_supported_version_if_version_supported(version)
+        supported_version = RubyVersion::SUPPORTED_VERSIONS.include?(version) ? version : nil
+        raise UnsupportedVersionError, 'Unsupported Ruby version given.' if supported_version.nil?
+
+        supported_version
+      rescue UnsupportedVersionError => e
+        puts "#{e.message}\n"\
+             "Supported versions: #{RubyVersion::SUPPORTED_VERSIONS}"
+        exit
       end
     end
   end
