@@ -38,10 +38,10 @@ module AbcSize
 
     def read_source_code_from_file
       data = File.read(path)
-      raise Error, 'File is empty!' if data.empty?
+      raise EmptyFileError, 'File is empty!' if data.empty?
 
       data
-    rescue TypeError, Errno::ENOENT, Errno::EISDIR, Error => e
+    rescue TypeError, Errno::ENOENT, Errno::EISDIR, EmptyFileError => e
       puts "#{e.message}\n"\
            'Please provide valid path to valid file.'
       exit
@@ -49,10 +49,10 @@ module AbcSize
 
     def return_ruby_version
       ruby_version = RubyVersion::Picker.new(parameters).call || RubyVersion::Detector.new(path).call
-      raise Error, 'Ruby version is unknown!' if ruby_version.nil?
+      raise UnknownVersionError, 'Ruby version is unknown!' if ruby_version.nil?
 
       ruby_version
-    rescue Error => e
+    rescue UnknownVersionError => e
       puts "#{e.message}\n"\
            'Please provide Ruby version with `-r` or `--ruby` option, especially if absolute path given.'
       exit
