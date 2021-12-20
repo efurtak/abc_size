@@ -48,10 +48,10 @@ module AbcSize
     end
 
     def return_ruby_version
-      ruby_version = RubyVersion::Picker.new(parameters).call || RubyVersion::Detector.new(path).call
-      raise UnknownVersionError, 'Ruby version is unknown!' if ruby_version.nil?
+      identified_version = RubyVersion::Picker.new(parameters).call || RubyVersion::Detector.new(path).call
+      raise UnknownVersionError, 'Ruby version is unknown!' if identified_version.nil?
 
-      ruby_version
+      identified_version
     rescue UnknownVersionError => e
       puts "#{e.message}\n"\
            'Please provide Ruby version with `-r` or `--ruby` option, especially if absolute path given.'
