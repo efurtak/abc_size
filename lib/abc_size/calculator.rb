@@ -26,7 +26,7 @@ module AbcSize
       @ruby_version = return_ruby_version
 
       nodes = RuboCop::AST::ProcessedSource.new(source, ruby_version).ast
-      nodes.each_node { |node| results << calculate_result(node, discount) if node.is_a?(RuboCop::AST::DefNode) }
+      nodes.each_node { |node| results << calculate_result(node) if node.is_a?(RuboCop::AST::DefNode) }
 
       print_all_messages
 
@@ -58,7 +58,7 @@ module AbcSize
       exit
     end
 
-    def calculate_result(node, _discount)
+    def calculate_result(node)
       abc_size, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(
         node,
         discount_repeated_attributes: discount
