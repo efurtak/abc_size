@@ -73,14 +73,13 @@ module AbcSize
     end
 
     def print_all_messages
-      print_versions
+      print_version
       print_results
-      print_interpretations
+      print_interpretation
     end
 
-    def print_versions
-      puts "Ruby version: #{color(ruby_version, true)}\n"\
-           "Supported versions: #{RubyVersion::SUPPORTED_VERSIONS}\n"\
+    def print_version
+      puts "Processed for Ruby version: #{color(ruby_version, true)}\n"\
            "\n"
     end
 
@@ -96,7 +95,7 @@ module AbcSize
       end
     end
 
-    def print_interpretations
+    def print_interpretation
       puts "\n"\
            "ABC size: <= 17 satisfactory, 18..30 unsatisfactory, > 30 dangerous\n"\
            'ABC: <assignments, branches (method calls), conditions>'
