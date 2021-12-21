@@ -8,15 +8,7 @@ module AbcSize
 
       RUBY_VERSION_FILENAME = '.ruby-version'
 
-      attr_reader :path
-
-      def initialize(path)
-        @path = path
-      end
-
       def call
-        return unless relative_path_given?
-
         file_version = return_file_version
 
         return_supported_version_if_version_supported(file_version)
@@ -25,10 +17,6 @@ module AbcSize
       end
 
       private
-
-      def relative_path_given?
-        !path.start_with?('/') if path
-      end
 
       def return_file_version
         data = return_data
@@ -39,7 +27,9 @@ module AbcSize
       end
 
       def return_data
-        data = File.read(RUBY_VERSION_FILENAME)
+        path = "#{Dir.pwd}/#{RUBY_VERSION_FILENAME}"
+
+        data = File.read(path)
         raise EmptyFileError if data.empty?
 
         data
