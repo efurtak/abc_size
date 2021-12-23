@@ -48,14 +48,7 @@ module AbcSize
     end
 
     def return_ruby_version
-      identified_version = RubyVersion::Picker.new(parameters).call || RubyVersion::Detector.new.call
-      raise UnknownVersionError, 'Ruby version is unknown!' if identified_version.nil?
-
-      identified_version
-    rescue UnknownVersionError => e
-      puts "#{e.message}\n"\
-           'Please provide Ruby version with `-r` or `--ruby` option.'
-      exit
+      RubyVersion::Picker.new(parameters).call || RubyVersion::Detector.new.call
     end
 
     def calculate_result(node)

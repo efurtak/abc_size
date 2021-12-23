@@ -7,7 +7,5 @@ module AbcSize
 
   class UnknownFormatError < Error; end
 
-  class UnknownVersionError < Error; end
-
   class UnsupportedVersionError < Error; end
 end
