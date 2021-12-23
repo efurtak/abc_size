@@ -3,12 +3,14 @@
 # rubocop:disable Metrics/BlockLength, RSpec/ContextWording, RSpec/NestedGroups
 RSpec.describe AbcSize::Calculator do
   describe '#call' do
-    context 'when invoking with source_code (for testing purposes only)' do
+    let(:parameters) { discount_repeated_attributes ? ['-r', 3.0, '-d'] : ['-r', 3.0] }
+
+    context 'when invoking with source_code (for testing purposes)' do
       subject(:with_source_code) do
-        described_class.new.call(
+        described_class.new(
           source_code: source,
-          discount: discount_repeated_attributes
-        )[0][1]
+          parameters: parameters
+        ).call[0][1]
       end
 
       let(:discount_repeated_attributes) { false }
@@ -396,10 +398,10 @@ RSpec.describe AbcSize::Calculator do
 
     context 'when invoking with path' do
       subject(:with_path) do
-        described_class.new.call(
+        described_class.new(
           path: path,
-          discount: discount_repeated_attributes
-        )
+          parameters: parameters
+        ).call
       end
 
       let(:discount_repeated_attributes) { false }
