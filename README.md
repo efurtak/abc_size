@@ -37,7 +37,13 @@ abc [file] [options]
 ```
 Options:
     -d, --discount    Discount repeated attributes
+    -r, --ruby        Ruby version
 ```
+
+Ruby code can be processed for specified Ruby version.
+
+Default behavior is to detect it from `.ruby-version` file at working directory.
+Alternatively it can be picked with `-r` or `--ruby` option.
 
 ## Contributing
 

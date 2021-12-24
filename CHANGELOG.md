@@ -1,3 +1,9 @@
+## [0.1.3] - 2021-12-24
+
+- Processing Ruby code for specified Ruby version.
+- Ruby version detection from `.ruby-version` file at working directory.
+- Ruby version picking with `-r` or `--ruby` option.
+
 ## [0.1.2] - 2021-12-04
 
 - Updates README.md
